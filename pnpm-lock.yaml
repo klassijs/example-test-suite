@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       klassi-js:
-        specifier: github:klassijs/klassi-js#feature/phase00
-        version: klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/60c6c7e3bce4d0af9812a5083451df7a06163149(@aws-sdk/client-sso-oidc@3.693.0(@aws-sdk/client-sts@3.693.0))(@aws-sdk/client-sts@3.693.0)(@cucumber/messages@24.1.0)(@wdio/globals@9.2.14(@wdio/logger@9.1.3))(@wdio/logger@9.1.3)
+        specifier: github:klassijs/klassi-js#feature/phase0
+        version: klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/f25fdf4fc6bb2078688f043f3d6ab4c97547375b(@aws-sdk/client-sso-oidc@3.693.0(@aws-sdk/client-sts@3.693.0))(@aws-sdk/client-sts@3.693.0)(@cucumber/messages@24.1.0)(@wdio/globals@9.2.14(@wdio/logger@9.1.3))(@wdio/logger@9.1.3)
       klassijs-assertion-tool:
         specifier: github:klassijs/klassijs-assertion-tool
         version: https://codeload.github.com/klassijs/klassijs-assertion-tool/tar.gz/7dca3647549c141f19e6c0bd06fbe72fae0f142b(@wdio/logger@9.1.3)(webdriverio@9.2.14)
@@ -1597,8 +1597,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/60c6c7e3bce4d0af9812a5083451df7a06163149:
-    resolution: {tarball: https://codeload.github.com/klassijs/klassi-js/tar.gz/60c6c7e3bce4d0af9812a5083451df7a06163149}
+  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/f25fdf4fc6bb2078688f043f3d6ab4c97547375b:
+    resolution: {tarball: https://codeload.github.com/klassijs/klassi-js/tar.gz/f25fdf4fc6bb2078688f043f3d6ab4c97547375b}
     version: 6.0.0
 
   klassijs-assertion-tool@https://codeload.github.com/klassijs/klassijs-assertion-tool/tar.gz/7dca3647549c141f19e6c0bd06fbe72fae0f142b:
@@ -4958,7 +4958,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/60c6c7e3bce4d0af9812a5083451df7a06163149(@aws-sdk/client-sso-oidc@3.693.0(@aws-sdk/client-sts@3.693.0))(@aws-sdk/client-sts@3.693.0)(@cucumber/messages@24.1.0)(@wdio/globals@9.2.14(@wdio/logger@9.1.3))(@wdio/logger@9.1.3):
+  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/f25fdf4fc6bb2078688f043f3d6ab4c97547375b(@aws-sdk/client-sso-oidc@3.693.0(@aws-sdk/client-sts@3.693.0))(@aws-sdk/client-sts@3.693.0)(@cucumber/messages@24.1.0)(@wdio/globals@9.2.14(@wdio/logger@9.1.3))(@wdio/logger@9.1.3):
     dependencies:
       '@aws-sdk/client-s3': 3.693.0
       '@aws-sdk/client-ses': 3.693.0

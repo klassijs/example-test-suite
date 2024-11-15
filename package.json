@@ -27,7 +27,7 @@
     "cilts3load": "node ./node_modules/klassi-js/index.js --disableReport --tags @s3load --remoteService lambdatest --extraSettings"
   },
   "dependencies": {
-    "klassi-js": "github:klassijs/klassi-js#feature/phase00",
+    "klassi-js": "github:klassijs/klassi-js#feature/phase0",
     "klassijs-assertion-tool": "github:klassijs/klassijs-assertion-tool",
     "klassijs-avt-service": "github:klassijs/klassijs-avt-service",
     "klassijs-ocr-service": "github:klassijs/klassijs-ocr-service",

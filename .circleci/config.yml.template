@@ -1,0 +1,301 @@
+# OUP Automated Testing Tool
+# Created by Larry Goddard
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+
+version: 2.1
+
+references:
+  filter_ignore_wip_branches:
+    filters:
+      branches:
+        ignore:
+          - /[a-z]{2}_wip.*/ # wip branches with initials prefix, e.g. mw_wip
+          - /wip\/.*/ # wip branches with wip/ prefix, e.g. wip/foo
+          - /poc\/.*/ # poc branches with poc/ prefix, e.g. poc/bar
+          - /automation\/.*/ # automation branches with automation/ prefix. e.g. automation/foo
+
+  filter_only_testable_branches: &filter_only_testable_branches
+    filters:
+      branches:
+        only:
+          - master # git flow production branch
+          - main # git flow production branch
+          - develop # git flow integration branch
+          - /feature\/.*/ # git flow feature branches
+          - /bugfix\/.*/ # git flow bugfix branches
+          - /release\/.*/ # git flow release branches
+          - /hotfix\/.*/ # git flow hotfix branches
+          - /support\/.*/ # git flow support branches
+          - /testfix\/.*/ # automation branches with testfix/ prefix. e.g. testfix/foo
+
+  filter_only_integration_branches: &filter_only_integration_branches
+    filters:
+      branches:
+        only:
+          - develop # git flow production branch
+          - /testfix\/.*/ # automation branches with testfix/ prefix. e.g. testfix/foo
+
+  filter_only_releasable_branches: &filter_only_releasable_branches
+    filters:
+      branches:
+        only:
+          - master # git flow production branch
+          - main # git flow production branch
+          - /hotfix\/.*/ # git flow hotfix branches
+          - /release\/.*/ # git flow release branches
+
+jobs:
+  #########################
+  ### build and install ###
+  #########################
+  build_install: &build_install
+    docker:
+      - image: cimg/node:18.12.1-browsers
+    resource_class: small
+    working_directory: ~/oup-oaf
+
+    steps:
+      - run:
+          name: Avoid hosts unknown for github
+          command: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+      - run:
+          name: Remove the old projectName Repo
+          command: rm -rf ~/oup-oaf/projectName
+
+      - run:
+          name: Checkout the projectName framework repo
+          command: git clone git@github.com:OUP/projectName.git
+
+      - run:
+          name: Check out the working branch
+          path: ~/oup-oaf/projectName
+          command: git checkout ${CIRCLE_BRANCH}
+
+      - run:
+          name: Generate dependency cache key
+          command: cat ~/oup-oaf/projectName/yarn.lock > CACHE_KEY
+
+      - restore_cache:
+          key: oaf-yarn-cache-v0-{{ checksum "CACHE_KEY" }}
+
+      - run:
+          name: Install the projectName framework dependencies
+          path: ~/oup-oaf/projectName
+          command: |
+            git config --global url."git@github.com:".insteadOf "https://github.com/"
+            yarn install --network-concurrency 1 || true
+
+      ##########################################################################
+      # Save yarn cache, don't include node modules because we end up with an  #
+      # archive so large that unarchiving takes longer than the yarn install   #
+      ##########################################################################
+      - save_cache:
+          paths:
+            - ~/.cache/yarn
+          key: oaf-yarn-cache-v0-{{ checksum "CACHE_KEY" }}
+
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./projectName
+
+  build_and_install:
+    <<: *build_install
+
+  ###########################################
+  #   Integration test base configuration   #
+  ###########################################
+  integration_test_base: &integration_test_base
+    docker:
+      - image: cimg/node:18.12.1-browsers
+    resource_class: small
+    parallelism: 2
+
+    steps:
+      - attach_workspace:
+          at: ./
+
+      - run:
+          name: Setting up tmp Dir for split files
+          command: mkdir ./tmp
+
+      - run:
+          name: Run integration tests
+          path: ./projectName
+          command: |
+            fgrep -rl --include *.feature @integration features | circleci tests split > /tmp/test-to-run | xargs -n 1 echo
+            TEST_FILES=$(cat /tmp/test-to-run | xargs | sed -e 's/ /,/g')
+            echo $TEST_FILES
+            yarn cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
+
+      - store_artifacts:
+          path: ./projectName/artifacts/visual-regression/original/
+
+      - store_test_results:
+          path: ./projectName/reports
+
+  integration_test_chrome:
+    <<: *integration_test_base
+    environment: { BROWSER: 'chrome', STAGE: 'dev' }
+
+  integration_test_firefox:
+    <<: *integration_test_base
+    environment: { BROWSER: 'firefox', STAGE: 'dev' }
+
+  ###########################################
+  #   Acceptance test base configuration    #
+  ###########################################
+  acceptance_test_base: &acceptance_test_base
+    docker:
+      - image: cimg/node:18.12.1-browsers
+    resource_class: small
+    parallelism: 2
+    steps:
+      - attach_workspace:
+          at: ./
+
+      - run:
+          name: Setting up tmp Dir for split files
+          command: mkdir ./tmp
+
+      - run:
+          name: Run acceptance tests
+          path: ./projectName
+          command: |
+            set +e # do not exit immediately on fail
+            trap 'EXIT_STATUS=$?' ERR # but trap errors and capture exit status
+
+            fgrep -rl --include *.feature @regression features | circleci tests split > /tmp/test-to-run | xargs -n 1 echo
+            TEST_FILES=$(cat /tmp/test-to-run | xargs | sed -e 's/ /,/g')
+            echo $TEST_FILES
+            yarn cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
+            env | grep EXIT_STATUS_[0-9]=[^0] && exit 1
+            echo test exiting with: $EXIT_STATUS
+            echo this is the node index: $CIRCLE_NODE_INDEX - $EXIT_STATUS
+            echo export EXIT_STATUS_$CIRCLE_NODE_INDEX="$EXIT_STATUS" >> "$BASH_ENV"
+
+      - run: |
+          cp $BASH_ENV bash.env
+
+      - store_artifacts:
+          path: ./projectName/artifacts/visual-regression/original/
+
+      - store_test_results:
+          path: ./projectName/reports
+
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./projectName/reports/*
+            - bash.env
+
+  acceptance_test_chrome:
+    <<: *acceptance_test_base
+    environment: { BROWSER: 'chrome', STAGE: 'uat' }
+
+  acceptance_test_firefox:
+    <<: *acceptance_test_base
+    environment: { BROWSER: 'firefox', STAGE: 'uat' }
+
+  ##########################################################################
+  #  Generating report from all the parallel run containers into one html  #
+  ##########################################################################
+  generate_report: &generate_report
+    docker:
+      - image: cimg/node:18.12.1-browsers
+    resource_class: small
+
+    steps:
+      - attach_workspace:
+          at: ./
+
+      - run: |
+         cat bash.env >> $BASH_ENV
+
+      - run:
+          name: Running combined html reporter & Uploading files to s3
+          path: ./projectName/reports
+          command: yarn cilt${STAGE} ${BROWSER} ${ENV}
+
+      - run:
+          name: sending exit status code
+          command: |
+            echo test exiting with:- $EXIT_STATUS
+            exit $EXIT_STATUS
+
+  upload_files_chrome:
+    <<: *generate_report
+    environment: { BROWSER: 'chrome', STAGE: 's3load' }
+
+  upload_files_firefox:
+    <<: *generate_report
+    environment: { BROWSER: 'firefox', STAGE: 's3load' }
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_and_install:
+          context: oaf-framework
+          <<: *filter_only_testable_branches
+
+      - acceptance_test_chrome:
+          context: oaf-framework
+          requires:
+            - build_and_install
+          <<: *filter_only_releasable_branches
+
+      - acceptance_test_firefox:
+          context: oaf-framework
+          requires:
+            - build_and_install
+          <<: *filter_only_releasable_branches
+
+      - integration_test_chrome:
+          context: oaf-framework
+          requires:
+            - build_and_install
+          <<: *filter_only_integration_branches
+
+      - integration_test_firefox:
+          context: oaf-framework
+          requires:
+            - build_and_install
+          <<: *filter_only_integration_branches
+
+  nightly_run:
+    triggers:
+      - schedule:
+          cron: "30 18 * * *"
+          filters:
+            branches:
+              only:
+                - main
+
+    jobs:
+      - build_and_install:
+          context: oaf-framework
+          <<: *filter_only_testable_branches
+
+      - acceptance_test_chrome:
+          context: oaf-framework
+          requires:
+            - build_and_install
+
+      - acceptance_test_firefox:
+          context: oaf-framework
+          requires:
+            - build_and_install
+
+      - upload_files_chrome:
+         context: oaf-framework
+         requires:
+           - acceptance_test_chrome
+
+      - upload_files_firefox:
+          context: oaf-framework
+          requires:
+            - acceptance_test_firefox

@@ -1,20 +1,47 @@
 {
-  "name": "klassi-example-test-suite",
-  "version": "5.2.0",
+  "name": "example-test-suite",
+  "version": "6.0.0",
   "license": "MIT",
-  "browser": "index.js",
-  "description": "A debuggable Javascript testing framework using webdriverio",
   "creator": {
     "name": "Larry Goddard",
+    "email": "larryg@klassitech.co.uk",
+    "X": "https://twitter.com/larryG_01",
     "linkedin": "https://linkedin.com/in/larryg",
-    "youtube": "https://youtube.com/@larryg_01"
+    "youtube": "https://youtube.com/@LarryG_01"
   },
+  "main": "index.js",
   "scripts": {
-    "pkgcheck": "yarn install --check-files",
-    "dev": "node ./node_modules/klassi-js/index.js  --disableReport --tags"
+    "predev": "pnpm run delete-dev",
+    "delete-dev12": "rm -rf ./reports ./artifacts ./log",
+    "delete-dev": "rm -rf ./reports ./artifacts ./log ./visual-regression-baseline",
+    "dev": "node ./node_modules/OAF/index.js --disableReport --tags",
+    "dev1": "node ./node_modules/OAF/index.js --disableReport --browserOpen --tags",
+    "ltlocal": "node ./node_modules/OAF/index.js --disableReport --remoteService lambdatest --extraSettings",
+    "============================================": "=======================================================",
+    "================ NOTE": "PLEASE DO NOT MAKE ANY CHANGES TO THE SCRIPTS BELOW THIS LINE ================",
+    "===========================================": "========================================================",
+    "pkgcheck": "pnpm install --check-files",
+    "prepare": "is-ci || husky install",
+    "lint-branch-name": "pnpm branch-name-lint ./branchnamelinter.config.json",
+    "changelog": "standard-version --skip.commit --skip.tag",
+    "changelog:patch": "standard-version --release-as patch --skip.commit --skip.tag",
+    "changelog:minor": "standard-version --release-as minor --skip.commit --skip.tag",
+    "changelog:major": "standard-version --release-as major --skip.commit --skip.tag",
+    "ciltuat": "node ./node_modules/OAF/index.js --disableReport --isCI --tags @regression --remoteService lambdatest --extraSettings",
+    "ciltdev": "node ./node_modules/OAF/index.js --disableReport --isCI --tags @integration --remoteService lambdatest --extraSettings",
+    "cilts3r": "node ./node_modules/OAF/index.js --disableReport --tags @s3 --remoteService lambdatest --extraSettings",
+    "cilts3load": "node ./node_modules/OAF/index.js --disableReport --tags @s3load --remoteService lambdatest --extraSettings"
   },
   "dependencies": {
-    "klassi-js": "klassijs/klassi-js",
-    "klassijs-visualValidation": "klassijs/klassijs-visualValidation"
+    "OAF": "github:klassijs/klassi-js#feature/phase0",
+    "klassijs-assertion-tool": "github:klassijs/klassijs-assertion-tool",
+    "klassijs-avt-service": "github:klassijs/klassijs-avt-service",
+    "klassijs-ocr-service": "github:klassijs/klassijs-ocr-service",
+    "klassijs-visual-validation": "github:klassijs/klassijs-visual-validation"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet --fix"
+    ]
   }
 }

@@ -2,9 +2,21 @@
 node_modules
 log
 
-# Framework Files
+# Files and Directory
+## project folders
+.npm
+.iml
+.node_repl_history
+reports
 artifacts
+shared-objects/docs/userAgent.txt
+visual-regression-baseline
+app.js
+.circleci/config.yml
 
+# NYC
+coverage
+.nyc_output
 
 # IntelliJ project files
 .idea
@@ -19,16 +31,15 @@ gen
 yarn-debug.log*
 yarn-error.log*
 
-# Dependency directories
-node_modules/
-reports
-
-# Output of 'npm pack'
-*.tgz
-
 # Yarn Integrity file
 .yarn-integrity
+.yarn
+.yarnrc
 
 # dotenv environment variables file
 .env
 .env.*
+
+
+#.circleci/config.yml
+eng.traineddata

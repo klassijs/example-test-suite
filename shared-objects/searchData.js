@@ -1,7 +1,8 @@
 module.exports = {
   elem: {
+    messageBox: '//cancel/button[@id="element"]',
     searchInput: '[name="q"]',
-    resultLink: 'div#links',
+    resultLink: '[data-testid="result-title-a"]:nth-child(1)',
     searchBtn: '[class="searchbox_searchButton__F5Bwq iconButton_button__6x_9C"]',
     searchBtnFF: 'button[aria-label="Search"]',
     leftBadge:

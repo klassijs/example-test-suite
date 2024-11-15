@@ -1,0 +1,13 @@
+{
+  "projectName": "OAF Example Test",
+  "build": "OAF Example Test",
+  "platform" : "Windows 10",
+  "browserName" : "Firefox",
+  "version" : "119.0",
+  "resolution" : "1280x1024",
+  "selenium_version" : "4.13.0",
+  "visual" : true,
+  "firefox.driver" : "v0.31.0",
+  "autoHeal": true,
+  "buildTags": []
+}

@@ -10,7 +10,7 @@ importers:
     dependencies:
       klassi-js:
         specifier: github:klassijs/klassi-js#feature/phase0
-        version: klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/2cfcfbabfe82d6b7ef930194dd38e6f636867446(@cucumber/messages@27.0.2)(@wdio/logger@9.4.4)(jiti@2.4.2)(typescript@5.8.2)
+        version: klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/29d80cb7ebc2507dae8833185cf51bc5976a602b(@cucumber/messages@27.0.2)(@wdio/logger@9.4.4)(jiti@2.4.2)(typescript@5.8.2)
       klassijs-a11y-validator:
         specifier: ^1.0.0
         version: 1.0.0
@@ -930,8 +930,8 @@ packages:
     resolution: {integrity: sha512-itaWrbYbqpGXkGhZPGUulwnhVf5Hpy1xiCFsGqyIGglbBxmG5vSjxQen3/WGOjPpNEv1RtBLKxbmVXm8HpJStQ==}
     engines: {node: '>= 0.4'}
 
-  array.prototype.findlastindex@1.2.5:
-    resolution: {integrity: sha512-zfETvRFA8o7EiNn++N5f/kaCw221hrpGsDmcpndVupkPzEc1Wuf3VgC0qby1BbHs7f5DVYjgtEU2LLh5bqeGfQ==}
+  array.prototype.findlastindex@1.2.6:
+    resolution: {integrity: sha512-F/TKATkzseUExPlfvmwQKGITM3DGTK+vkAsCZoDc5daVygbJBnjEUCbgkAvVFsgfXfX4YIqZ/27G3k3tdXrTxQ==}
     engines: {node: '>= 0.4'}
 
   array.prototype.flat@1.3.3:
@@ -2429,8 +2429,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/2cfcfbabfe82d6b7ef930194dd38e6f636867446:
-    resolution: {tarball: https://codeload.github.com/klassijs/klassi-js/tar.gz/2cfcfbabfe82d6b7ef930194dd38e6f636867446}
+  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/29d80cb7ebc2507dae8833185cf51bc5976a602b:
+    resolution: {tarball: https://codeload.github.com/klassijs/klassi-js/tar.gz/29d80cb7ebc2507dae8833185cf51bc5976a602b}
     version: 5.3.0
 
   klassijs-a11y-validator@1.0.0:
@@ -5449,9 +5449,10 @@ snapshots:
       get-intrinsic: 1.3.0
       is-string: 1.1.1
 
-  array.prototype.findlastindex@1.2.5:
+  array.prototype.findlastindex@1.2.6:
     dependencies:
       call-bind: 1.0.8
+      call-bound: 1.0.4
       define-properties: 1.2.1
       es-abstract: 1.23.9
       es-errors: 1.3.0
@@ -6249,7 +6250,7 @@ snapshots:
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
-      array.prototype.findlastindex: 1.2.5
+      array.prototype.findlastindex: 1.2.6
       array.prototype.flat: 1.3.3
       array.prototype.flatmap: 1.3.3
       debug: 3.2.7
@@ -7101,7 +7102,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/2cfcfbabfe82d6b7ef930194dd38e6f636867446(@cucumber/messages@27.0.2)(@wdio/logger@9.4.4)(jiti@2.4.2)(typescript@5.8.2):
+  klassi-automation-framework@https://codeload.github.com/klassijs/klassi-js/tar.gz/29d80cb7ebc2507dae8833185cf51bc5976a602b(@cucumber/messages@27.0.2)(@wdio/logger@9.4.4)(jiti@2.4.2)(typescript@5.8.2):
     dependencies:
       '@aws-sdk/client-s3': 3.758.0
       '@aws-sdk/client-ses': 3.758.0

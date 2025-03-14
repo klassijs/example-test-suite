@@ -1,12 +1,15 @@
 {
-  "projectName": "OAF Example Test",
-  "build": "OAF Example Test",
+  "projectName": "OAF Example Project",
+  "build": "OAF Example Project",
   "platform": "Android",
-  "deviceName": "Galaxy Tab S8+",
-  "platformVersion": "13",
+  "deviceName": "Galaxy Tab S9 Ultra",
+  "platformVersion": "14",
   "deviceOrientation": "LANDSCAPE",
-  "buildTags": [ ],
+  "buildTags": [
+    "acceptance_test",
+    "integration_test",
+    "api_test"
+  ],
   "visual": true,
-  "autoHeal": true,
-  "buildTags": []
+  "autoHeal": true
 }

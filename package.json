@@ -1,26 +1,36 @@
 {
-  "name": "example-test-suite",
+  "name": "klassi-js-example-project",
   "version": "6.0.0",
   "license": "MIT",
   "creator": {
     "name": "Larry Goddard",
     "email": "larryg@klassitech.co.uk",
-    "X": "https://twitter.com/larryG_01",
     "linkedin": "https://linkedin.com/in/larryg",
     "youtube": "https://youtube.com/@LarryG_01"
   },
-  "main": "index.js",
+  "contributors": [
+    {
+      "name": "Carlos Bermejo",
+      "github": "https://github.com/carlosbermejop"
+    }
+  ],
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
   "scripts": {
-    "predev": "pnpm run delete-dev",
-    "delete-dev12": "rm -rf ./reports ./artifacts ./log",
-    "delete-dev": "rm -rf ./reports ./artifacts ./log ./visual-regression-baseline",
+    "predev": "pnpm delete-dev",
+    "delete-dev": "rimraf ./reports ./artifacts ./visual-regression-baseline",
     "dev": "node ./node_modules/klassi-js/index.js --disableReport --tags",
-    "dev1": "node ./node_modules/klassi-js/index.js --disableReport --browserOpen --tags",
     "ltlocal": "node ./node_modules/klassi-js/index.js --disableReport --remoteService lambdatest --extraSettings",
     "============================================": "=======================================================",
     "================ NOTE": "PLEASE DO NOT MAKE ANY CHANGES TO THE SCRIPTS BELOW THIS LINE ================",
     "===========================================": "========================================================",
-    "pkgcheck": "pnpm install --check-files",
+    "preinstall": "npx only-allow pnpm",
+    "pkgcheck": "pnpm install --frozen-lockfile",
+    "lint": "pnpm lint-staged && pnpm lint:gherkin",
+    "lint:gherkin": "gherkin-lint -c node_modules/klassi-js/runtime/coding-standards/gherkin/gherkin-lint.json '**/*.feature'",
+    "lint-branch-name": "pnpm branch-name-lint ./branchnamelinter.config.json",
     "ciltuat": "node ./node_modules/klassi-js/index.js --disableReport --isCI --tags @regression --remoteService lambdatest --extraSettings",
     "ciltdev": "node ./node_modules/klassi-js/index.js --disableReport --isCI --tags @integration --remoteService lambdatest --extraSettings",
     "cilts3r": "node ./node_modules/klassi-js/index.js --disableReport --tags @s3 --remoteService lambdatest --extraSettings",
@@ -28,14 +38,23 @@
   },
   "dependencies": {
     "klassi-js": "github:klassijs/klassi-js#feature/phase0",
-    "klassijs-assertion-tool": "github:klassijs/klassijs-assertion-tool",
-    "klassijs-avt-service": "github:klassijs/klassijs-avt-service",
-    "klassijs-ocr-service": "github:klassijs/klassijs-ocr-service",
-    "klassijs-visual-validation": "github:klassijs/klassijs-visual-validation"
+    "klassijs-a11y-validator": "^1.0.0",
+    "klassijs-astellen": "^1.0.0",
+    "klassijs-pageObject-selector": "github:klassijs/klassijs-pageObject-selector",
+    "klassijs-smart-ocr": "github:klassijs/klassijs-smart-ocr",
+    "klassijs-soft-assert": "^1.2.1",
+    "klassijs-visual-validation": "^1.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "branch-name-lint": "^2.1.1",
+    "gherkin-lint": "^4.2.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "rimraf": "^6.0.1"
   },
   "lint-staged": {
-    "**/*.js": [
-      "eslint --quiet --fix"
-    ]
+    "**/*.js": "eslint --quiet --fix --config node_modules/klassi-js/runtime/coding-standards/eslint/eslint.config.js"
   }
 }

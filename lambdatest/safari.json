@@ -1,13 +1,16 @@
 {
-  "projectName": "OAF Example Test",
-  "build": "OAF Example Test",
-  "platformName": "macOS Ventura",
-  "browserName" : "Safari",
-  "version" : "16.0",
-  "resolution" : "1280x1024",
-  "selenium_version": "4.13.0",
-  "driver_version": "4.13.0",
-  "buildTags": [],
-  "visual" : true,
+  "projectName": "OAF Example Project",
+  "build": "OAF Example Project",
+  "platformName": "MacOS Ventura",
+  "browserName": "Safari",
+  "version": "16.0",
+  "resolution": "1280x1024",
+  "selenium_version": "4.25.0",
+  "buildTags": [
+    "acceptance_test",
+    "integration_test",
+    "api_test"
+  ],
+  "visual": true,
   "autoHeal": true
 }

@@ -9,14 +9,6 @@ log
 .node_repl_history
 reports
 artifacts
-shared-objects/docs/userAgent.txt
-visual-regression-baseline
-app.js
-.circleci/config.yml
-
-# NYC
-coverage
-.nyc_output
 
 # IntelliJ project files
 .idea
@@ -39,7 +31,6 @@ yarn-error.log*
 # dotenv environment variables file
 .env
 .env.*
-
 
 #.circleci/config.yml
 eng.traineddata

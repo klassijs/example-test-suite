@@ -1,12 +1,12 @@
-const { takeImage, compareImage } = require('klassijs-visual-validation');
 const { a11yValidator } = require('klassijs-a11y-validator');
+const { takeImage, compareImage } = require('klassijs-visual-validation');
 const { softAssert } = require('klassijs-soft-assert');
 const { extractTextFromImage } = require('klassijs-smart-ocr');
 
 let image;
 let elem;
 
-class search {
+module.exports = {
   /**
    * enters a search term into duckduckgo's search box and presses enter
    * @param {string} searchWord
@@ -25,7 +25,7 @@ class search {
     await takeImage(`${image}_1-0.png`);
     await compareImage(`${image}_inputBox.png`);
     await compareImage(`${image}_1-0.png`);
-    //
+
     // /** This reads the text on an image */
     await extractTextFromImage(`${image}_1-0.png`);
     await elem.addValue(searchWord);
@@ -36,13 +36,13 @@ class search {
     const title = await browser.getTitle();
     console.log('checking what title being returned:- ================> ', title);
     await browser.pause(DELAY_1s);
-    await softAssert(title, 'tohavetext', 'our prioritys');
-    await softAssert(title, 'tohavetext', 'our priority');
+    await softAssert(title, 'tohavetext', 'privacies');
+    await softAssert(title, 'tohavetext', 'Privacy');
     await compareImage(`${image}_1-1.png`);
     await extractTextFromImage(`${image}_1-1.png`);
     await browser.keys('\uE007');
     await browser.pause(DELAY_1s);
-  }
+  },
 
   async searchResult(searchWord){
     image = searchWord;
@@ -63,4 +63,4 @@ class search {
   }
 }
 
-module.exports = new search();
+

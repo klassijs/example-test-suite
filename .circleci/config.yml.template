@@ -15,20 +15,7 @@ references:
           - /wip\/.*/ # wip branches with wip/ prefix, e.g. wip/foo
           - /poc\/.*/ # poc branches with poc/ prefix, e.g. poc/bar
           - /automation\/.*/ # automation branches with automation/ prefix. e.g. automation/foo
-
-  filter_only_testable_branches: &filter_only_testable_branches
-    filters:
-      branches:
-        only:
-          - master # git flow production branch
-          - main # git flow production branch
-          - develop # git flow integration branch
-          - /feature\/.*/ # git flow feature branches
-          - /bugfix\/.*/ # git flow bugfix branches
-          - /release\/.*/ # git flow release branches
-          - /hotfix\/.*/ # git flow hotfix branches
-          - /support\/.*/ # git flow support branches
-          - /testfix\/.*/ # automation branches with testfix/ prefix. e.g. testfix/foo
+          - /feature\/.*/ # automation branches with feature/ prefix. e.g. feature/foo
 
   filter_only_integration_branches: &filter_only_integration_branches
     filters:
@@ -36,6 +23,17 @@ references:
         only:
           - develop # git flow production branch
           - /testfix\/.*/ # automation branches with testfix/ prefix. e.g. testfix/foo
+
+  filter_only_testable_branches: &filter_only_testable_branches
+    filters:
+      branches:
+        only:
+          - master # git flow master branch
+          - main # git flow main branch
+          - develop # git flow develop branch
+          - /hotfix\/.*/ # git flow hotfix branches
+          - /release\/.*/ # git flow release branches
+          - /testfix\/.*/ # testfix branches with testfix/ prefix. e.g. testfix/foo
 
   filter_only_releasable_branches: &filter_only_releasable_branches
     filters:
@@ -52,11 +50,28 @@ jobs:
   #########################
   build_install: &build_install
     docker:
-      - image: cimg/node:18.12.1-browsers
+      - image: cimg/node:20.18.3-browsers
     resource_class: small
     working_directory: ~/oup-oaf
 
     steps:
+      # Install pnpm globally
+      - run:
+          name: Install pnpm
+          command: |
+            export SHELL=/bin/bash
+            curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+      # Add PNPM to the path
+      - run:
+          name: Set up PNPM environment
+          command: export PATH="$HOME/.local/share/pnpm:$PATH"
+
+      # Verify pnpm installation
+      - run:
+          name: Check pnpm version
+          command: pnpm --version
+
       - run:
           name: Avoid hosts unknown for github
           command: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
@@ -74,28 +89,41 @@ jobs:
           path: ~/oup-oaf/projectName
           command: git checkout ${CIRCLE_BRANCH}
 
+      # Generate a robust dependency cache key using SHA-256
       - run:
           name: Generate dependency cache key
-          command: cat ~/oup-oaf/projectName/yarn.lock > CACHE_KEY
+          command: |
+            if [ -f pnpm-lock.yaml ]; then
+              shasum -a 256 ~/oup-oaf/projectName/pnpm-lock.yaml > CACHE_KEY
+            else
+              echo "pnpm-lock.yaml not found, using package.json instead"
+              shasum -a 256 ~/oup-oaf/projectName/package.json > CACHE_KEY
+            fi
 
+      # Restore cache if available
       - restore_cache:
-          key: oaf-yarn-cache-v0-{{ checksum "CACHE_KEY" }}
+          name: Restore pnpm cache
+          keys:
+            - pnpm-cache-v1-{{ checksum "CACHE_KEY" }}
+            - pnpm-cache-v1-  # Fallback cache key
+
 
       - run:
           name: Install the projectName framework dependencies
           path: ~/oup-oaf/projectName
           command: |
             git config --global url."git@github.com:".insteadOf "https://github.com/"
-            yarn install --network-concurrency 1 || true
+            pnpm install --network-concurrency 1 || true
 
       ##########################################################################
-      # Save yarn cache, don't include node modules because we end up with an  #
-      # archive so large that unarchiving takes longer than the yarn install   #
+      # Save pnpm cache, don't include node modules because we end up with an  #
+      # archive so large that unarchiving takes longer than the pnpm install   #
       ##########################################################################
+      # Save cache
       - save_cache:
+          key: pnpm-cache-v1-{{ checksum "CACHE_KEY" }}
           paths:
-            - ~/.cache/yarn
-          key: oaf-yarn-cache-v0-{{ checksum "CACHE_KEY" }}
+            - ~/.pnpm-store  # PNPM's global store for caching dependencies
 
       - persist_to_workspace:
           root: ./
@@ -110,7 +138,7 @@ jobs:
   ###########################################
   integration_test_base: &integration_test_base
     docker:
-      - image: cimg/node:18.12.1-browsers
+      - image: cimg/node:20.18.3-browsers
     resource_class: small
     parallelism: 2
 
@@ -129,7 +157,7 @@ jobs:
             fgrep -rl --include *.feature @integration features | circleci tests split > /tmp/test-to-run | xargs -n 1 echo
             TEST_FILES=$(cat /tmp/test-to-run | xargs | sed -e 's/ /,/g')
             echo $TEST_FILES
-            yarn cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
+            pnpm cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
 
       - store_artifacts:
           path: ./projectName/artifacts/visual-regression/original/
@@ -150,7 +178,7 @@ jobs:
   ###########################################
   acceptance_test_base: &acceptance_test_base
     docker:
-      - image: cimg/node:18.12.1-browsers
+      - image: cimg/node:20.18.3-browsers
     resource_class: small
     parallelism: 2
     steps:
@@ -171,7 +199,7 @@ jobs:
             fgrep -rl --include *.feature @regression features | circleci tests split > /tmp/test-to-run | xargs -n 1 echo
             TEST_FILES=$(cat /tmp/test-to-run | xargs | sed -e 's/ /,/g')
             echo $TEST_FILES
-            yarn cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
+            pnpm cilt${STAGE} ${BROWSER} --featureFiles $TEST_FILES
             env | grep EXIT_STATUS_[0-9]=[^0] && exit 1
             echo test exiting with: $EXIT_STATUS
             echo this is the node index: $CIRCLE_NODE_INDEX - $EXIT_STATUS
@@ -205,7 +233,7 @@ jobs:
   ##########################################################################
   generate_report: &generate_report
     docker:
-      - image: cimg/node:18.12.1-browsers
+      - image: cimg/node:20.18.3-browsers
     resource_class: small
 
     steps:
@@ -218,7 +246,7 @@ jobs:
       - run:
           name: Running combined html reporter & Uploading files to s3
           path: ./projectName/reports
-          command: yarn cilt${STAGE} ${BROWSER} ${ENV}
+          command: pnpm cilt${STAGE} ${BROWSER} ${ENV}
 
       - run:
           name: sending exit status code

@@ -1,3 +1,4 @@
+const { softAssert } = require('klassijs-soft-assert');
 let resp;
 
 module.exports = {
@@ -11,18 +12,24 @@ module.exports = {
 
     console.log('endPoint and statusCode ', `${url}:${resp.statusCode}`);
   },
+
   /**
    * Getting the Status Code
    */
   staCode: async (stcode) => {
     await browser.pause(DELAY_100ms);
     try {
-      expect(resp.statusCode).to.equal(stcode);
+      await softAssert(resp.statusCode, 'equal', stcode);
     } catch (err) {
       console.error(err);
-      expect(resp.statusCode).to.equal(200, 'The fallback validation for a 200 status code also failed.');
+      await softAssert(
+        resp.statusCode,
+        'equal',
+        200,
+        'The fallback validation for a 200 status code also failed.');
     }
   },
+
   /**
    * Getting the Content of the API
    */

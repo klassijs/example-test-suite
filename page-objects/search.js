@@ -37,7 +37,7 @@ class search {
     console.log('checking what title being returned:- ================> ', title);
     await browser.pause(DELAY_1s);
     await softAssert(title, 'tohavetext', 'our prioritys');
-    await softAssert(title, 'tohavetext', 'our priority');
+    await softAssert(title, 'tohavetext', 'Peace of mind 12');
     await compareImage(`${image}_1-1.png`);
     await extractTextFromImage(`${image}_1-1.png`);
     await browser.keys('\uE007');

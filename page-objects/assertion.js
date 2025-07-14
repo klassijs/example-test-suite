@@ -1,4 +1,4 @@
-const { softAssert } = require('klassijs-soft-assert');
+const { softAssert, getAssert } = require('klassijs-soft-assert');
 
 let elem;
 
@@ -9,6 +9,7 @@ class assertion {
    * @returns {Promise} a promise to enter the search values
    */
   async performWebSearch(searchWord) {
+    const assert = await getAssert();
     elem = await browser.$(sharedObjects.searchData.elem.searchInput);
     await browser.pause(DELAY_1s);
     await elem.addValue(searchWord);
@@ -16,8 +17,9 @@ class assertion {
     const title = await browser.getTitle();
     console.log('checking what title being returned:- ================> ', title);
     await browser.pause(DELAY_1s);
-    await softAssert(title, 'tohavetext', 'our prioritys');
-    await softAssert(title, 'tohavetext', 'our priority');
+    await softAssert(title, 'tohavetext', 'Peace of mind', null, null);
+    await softAssert(title, 'tohavetext', 'priorities', null, null);
+    // await assert.include(title, 'Privacys', null, null);
     await browser.keys('\uE007');
     await browser.pause(DELAY_1s);
   }
@@ -25,8 +27,8 @@ class assertion {
   async searchResult(searchWord){
     elem = await browser.$(sharedObjects.searchData.elem.resultLink);
     console.log('checking what elem.length is ================> ', elem.elementId);
-    await softAssert(elem.elementId,'equal', null );
     await softAssert(elem.elementId,'toNotEqual', null );
+    await softAssert(elem.elementId,'equal', null );
     await browser.pause(DELAY_1s);
     await elem.click()
   }

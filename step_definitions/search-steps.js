@@ -4,9 +4,7 @@ const pageObjectMap = require('../shared-objects/pageObjectData');
 let activePageObject;
 
 Before(() => {
-  console.log('activePageObject ========================== 0 :', pageObjectMap);
   activePageObject = getActivePageObject(pageObjectMap);
-  console.log('activePageObject ========================== 1 :', activePageObject);
 });
 
 Given(/^The user arrives on the duckduckgo search page$/, async () => {

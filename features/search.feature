@@ -8,7 +8,7 @@ Feature: Searching for apps with duckduckgo
   Scenario Outline: User inputs <searchword> and searches for data
     Given The user arrives on the duckduckgo search page
     When they input <searchword>
-#    Then they should see some results <searchword>
+    Then they should see some results <searchword>
 
     Examples:
       |searchword  |

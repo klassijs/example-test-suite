@@ -12,7 +12,7 @@ module.exports = {
    * @param {string} searchWord
    * @returns {Promise} a promise to enter the search values
    */
-  async performWebSearch(searchWord){
+  async webSearch(searchWord){
     image = searchWord;
     await browser.$(sharedObjects.searchData.elem.messageBox); // this is the xPath check point
     elem = await browser.$(sharedObjects.searchData.elem.searchInput);
@@ -44,7 +44,7 @@ module.exports = {
     await browser.pause(DELAY_1s);
   },
 
-  async searchResult(searchWord){
+  async result(searchWord){
     image = searchWord;
     /** return the promise of an element to the following then */
     await a11yValidator(`SearchPage3-${searchWord}`);

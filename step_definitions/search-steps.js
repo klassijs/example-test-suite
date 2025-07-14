@@ -3,8 +3,9 @@ const pageObjectMap = require('../shared-objects/pageObjectData');
 
 let activePageObject;
 
-Before((scenario) => {
-  activePageObject = getActivePageObject(scenario, pageObjectMap);
+Before(() => {
+  console.log('activePageObject ========================== 0 :', pageObjectMap);
+  activePageObject = getActivePageObject(pageObjectMap);
   console.log('activePageObject ========================== 1 :', activePageObject);
 });
 

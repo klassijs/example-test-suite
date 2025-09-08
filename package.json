@@ -1,6 +1,6 @@
 {
   "name": "klassi-js-example-project",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "license": "MIT",
   "creator": {
     "name": "Larry Goddard",
@@ -37,21 +37,21 @@
     "cilts3load": "node ./node_modules/klassi-js/index.js --disableReport --tags @s3load --remoteService lambdatest --extraSettings"
   },
   "dependencies": {
-    "klassi-js": "github:klassijs/klassi-js#feature/phase01",
+    "klassi-js": "github:klassijs/klassi-js#v6.0.1",
     "klassijs-a11y-validator": "^1.0.0",
-    "klassijs-astellen": "^1.0.0",
+    "klassijs-astellen": "^1.0.1",
     "klassijs-pageObject-selector": "github:klassijs/klassijs-pageObject-selector",
     "klassijs-smart-ocr": "github:klassijs/klassijs-smart-ocr",
-    "klassijs-soft-assert": "github:klassijs/klassijs-soft-assert#develop",
-    "klassijs-visual-validation": "^1.1.0"
+    "klassijs-soft-assert": "^1.3.0",
+    "klassijs-visual-validation": "^1.2.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "branch-name-lint": "^2.1.1",
     "gherkin-lint": "^4.2.4",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.0",
+    "lint-staged": "^15.5.2",
     "rimraf": "^6.0.1"
   },
   "lint-staged": {

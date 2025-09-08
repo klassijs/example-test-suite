@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       klassi-js:
-        specifier: github:klassijs/klassi-js#v6.0.1
-        version: https://codeload.github.com/klassijs/klassi-js/tar.gz/afb264c85424af5388915bc09b8cee2bf471edda(@cucumber/messages@27.2.0)(@wdio/logger@9.18.0)(jiti@2.5.1)(typescript@5.9.2)
+        specifier: ^6.0.1
+        version: 6.0.1(@cucumber/messages@27.2.0)(@wdio/logger@9.18.0)(jiti@2.5.1)(typescript@5.9.2)
       klassijs-a11y-validator:
         specifier: ^1.0.0
         version: 1.0.0
@@ -2488,9 +2488,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  klassi-js@https://codeload.github.com/klassijs/klassi-js/tar.gz/afb264c85424af5388915bc09b8cee2bf471edda:
-    resolution: {tarball: https://codeload.github.com/klassijs/klassi-js/tar.gz/afb264c85424af5388915bc09b8cee2bf471edda}
-    version: 6.0.1
+  klassi-js@6.0.1:
+    resolution: {integrity: sha512-uaBE0/YRGXCZxVOqGGCwZ35kXvaaRL1DPVxpPxpj/m/KxQtM/QF185YLzjRtOt/NZ656SrtrW13NVn1H3u1GSw==}
 
   klassijs-a11y-validator@1.0.0:
     resolution: {integrity: sha512-7xOI9OgRn6yl+A6gVhFZBuW3XNgZQD9wePfaLcEf80jg98WJglXy5VX+eMIzwvpBDWEPzDV5f5BUYMq5BiGdvA==}
@@ -5402,7 +5401,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 20.19.13
+      '@types/node': 24.3.1
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -5412,7 +5411,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.19.13
+      '@types/node': 24.3.1
     optional: true
 
   '@vitest/pretty-format@3.2.4':
@@ -7260,7 +7259,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  klassi-js@https://codeload.github.com/klassijs/klassi-js/tar.gz/afb264c85424af5388915bc09b8cee2bf471edda(@cucumber/messages@27.2.0)(@wdio/logger@9.18.0)(jiti@2.5.1)(typescript@5.9.2):
+  klassi-js@6.0.1(@cucumber/messages@27.2.0)(@wdio/logger@9.18.0)(jiti@2.5.1)(typescript@5.9.2):
     dependencies:
       '@aws-sdk/client-s3': 3.883.0
       '@aws-sdk/client-ses': 3.883.0

@@ -37,12 +37,13 @@
     "cilts3load": "node ./node_modules/klassi-js/index.js --disableReport --tags @s3load --remoteService lambdatest --extraSettings"
   },
   "dependencies": {
-    "klassi-js": "github:klassijs/klassi-js#feature/phase01",
+    "klassi-js": "github:klassijs/klassi-js#v6.0.1",
+    "klassi-js-example-project": "link:",
     "klassijs-a11y-validator": "^1.0.0",
     "klassijs-astellen": "^1.0.0",
     "klassijs-pageObject-selector": "github:klassijs/klassijs-pageObject-selector",
     "klassijs-smart-ocr": "github:klassijs/klassijs-smart-ocr",
-    "klassijs-soft-assert": "github:klassijs/klassijs-soft-assert#develop",
+    "klassijs-soft-assert": "^1.2.1",
     "klassijs-visual-validation": "^1.1.0"
   },
   "devDependencies": {

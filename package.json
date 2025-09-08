@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "klassi-js": "github:klassijs/klassi-js#v6.0.1",
+    "klassi-js-example-project": "link:",
     "klassijs-a11y-validator": "^1.0.0",
     "klassijs-astellen": "^1.0.1",
     "klassijs-pageObject-selector": "github:klassijs/klassijs-pageObject-selector",
